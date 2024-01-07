@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich Text Editor Widget</title>
+    <style>
+        .editor-container {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+
+        .editor-toolbar button {
+            margin: 5px;
+        }
+
+        .editor-content {
+            border: 1px solid #ccc;
+            height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+            /*width: 100%;*/
+            white-space: pre-wrap;
+        }
+
+        .html-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        /* Aggiunti stili per il modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="editor-container">
+        <div class="editor-toolbar">
+            <button onclick="execCommand('bold')">Bold</button>
+            <button onclick="execCommand('italic')">Italic</button>
+            <button onclick="execCommand('underline')">Underline</button>
+            <button onclick="execCommand('insertOrderedList')">Numbered List</button>
+            <button onclick="execCommand('insertUnorderedList')">Bullet List</button>
+            <button onclick="execCommand('justifyLeft')">Align Left</button>
+            <button onclick="execCommand('justifyCenter')">Align Center</button>
+            <button onclick="execCommand('justifyRight')">Align Right</button>
+            <button onclick="wrapSelectedText('p')">Paragraph</button>
+            <button onclick="wrapSelectedText('h1')">Heading 1</button>
+            <button onclick="wrapSelectedText('h2')">Heading 2</button>
+            <button onclick="wrapSelectedText('h3')">Heading 3</button>
+            <button onclick="openImageModal()">Insert Image</button>
+        </div>
+        <div class="editor-content" contenteditable="true" id="editor" oninput="updateHtmlCode()"
+            onkeydown="handleEnterKey()" onclick="updateCursorPosition()"></div>
+
+        <div class="html-container">
+            <h3>HTML Code</h3>
+            <textarea id="html-code" rows="10" style="width: 100%;" oninput="updateEditorContent()"></textarea>
+        </div>
+    </div>
+
+    <!-- Modal per l'inserimento dell'immagine -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeImageModal()">&times;</span>
+            <label for="imageUrl">Image URL:</label>
+            <input type="text" id="imageUrl">
+            <label for="imageWidth">Width:</label>
+            <input type="text" id="imageWidth">
+            <label for="imageHeight">Height:</label>
+            <input type="text" id="imageHeight">
+            <label>Modify:</label>
+            <select id="modifyOption" onchange="handleModifyOption()">
+                <option value="both">Both</option>
+                <option value="width">Width</option>
+                <option value="height">Height</option>
+            </select>
+            <label for="imageAlign">Align:</label>
+            <select id="imageAlign">
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+            </select>
+            <label for="imageMargin">Margin:</label>
+            <input type="text" id="imageMargin">
+            <button onclick="insertImage()">Insert Image</button>
+        </div>
+    </div>
+
+    <script>
+        let cursorPosition;
+
+        function execCommand(command, value = null) {
+            document.execCommand(command, false, value);
+            updateHtmlCode();
+        }
+
+        function wrapSelectedText(tag) {
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents();
+            const wrapper = document.createElement(tag);
+
+            // Trova il tag di intestazione nella gerarchia DOM
+            let parentNode = range.commonAncestorContainer;
+
+            while (parentNode && !parentNode.nodeName.match(/^(H1|H2|H3)$/)) {
+                parentNode = parentNode.parentNode;
+            }
+
+            if (parentNode) {
+                // Rimuovi il tag di intestazione esistente
+                const parent = parentNode.parentNode;
+                while (parentNode.firstChild) {
+                    parent.insertBefore(parentNode.firstChild, parentNode);
+                }
+                parent.removeChild(parentNode);
+            }
+
+            wrapper.appendChild(selectedText);
+            range.insertNode(wrapper);
+
+            updateHtmlCode();
+        }
+
+        function openImageModal() {
+            cursorPosition = saveSelection();
+            document.getElementById('imageModal').style.display = 'block';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        function handleModifyOption() {
+            const modifyOption = document.getElementById('modifyOption').value;
+            const widthInput = document.getElementById('imageWidth');
+            const heightInput = document.getElementById('imageHeight');
+
+            if (modifyOption === 'both') {
+                widthInput.disabled = false;
+                heightInput.disabled = false;
+            } else if (modifyOption === 'width') {
+                widthInput.disabled = false;
+                heightInput.disabled = true;
+                heightInput.value = '';
+            } else if (modifyOption === 'height') {
+                widthInput.disabled = true;
+                heightInput.disabled = false;
+                widthInput.value = '';
+            }
+        }
+
+        function insertImage() {
+            const imageUrl = document.getElementById('imageUrl').value;
+            const imageWidth = document.getElementById('imageWidth').value;
+            const imageHeight = document.getElementById('imageHeight').value;
+            const modifyOption = document.getElementById('modifyOption').value;
+            const imageAlign = document.getElementById('imageAlign').value;
+            const imageMargin = document.getElementById('imageMargin').value;
+
+            let imageStyle = '';
+            if (imageWidth) {
+                imageStyle += `width: ${imageWidth}px; `;
+            }
+            if (imageHeight) {
+                imageStyle += `height: ${imageHeight}px; `;
+            }
+            if (imageMargin) {
+                imageStyle += `margin: ${imageMargin}; `;
+            }
+
+            const imageTag = `<img src="${imageUrl}" style="${imageStyle}" align="${imageAlign}">`;
+
+            restoreSelection(cursorPosition);
+            document.execCommand('insertHTML', false, imageTag);
+
+            closeImageModal();
+            updateHtmlCode();
+        }
+
+        function updateHtmlCode() {
+            const editorContent = document.getElementById('editor').innerHTML;
+            document.getElementById('html-code').value = editorContent;
+        }
+
+        function updateEditorContent() {
+            const htmlCode = document.getElementById('html-code').value;
+            document.getElementById('editor').innerHTML = htmlCode;
+        }
+
+        function handleEnterKey() {
+            updateHtmlCode();
+        }
+
+        function saveSelection() {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                return selection.getRangeAt(0);
+            }
+            return null;
+        }
+
+        function restoreSelection(range) {
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        function updateCursorPosition() {
+            cursorPosition = saveSelection();
+        }
+    </script>
+
+</body>
+
+</html>
