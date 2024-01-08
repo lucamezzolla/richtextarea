@@ -16,22 +16,22 @@
 
     <div class="editor-container">
         <div class="editor-toolbar">
-            <button onclick="execCommand('bold')" class="menu-item" title="Bold"><i class="fa-solid fa-bold"></i></button>
-            <button onclick="execCommand('italic')" class="menu-item" title="Italic"><i class="fa-solid fa-italic"></i></button>
-            <button onclick="execCommand('underline')" class="menu-item" title="Underline"><i class="fa-solid fa-underline"></i></button>
-            <button onclick="execCommand('insertOrderedList')" class="menu-item" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
-            <button onclick="execCommand('insertUnorderedList')" class="menu-item" title="Bullet List"><i class="fa-solid fa-list"></i></button>
-            <button onclick="execCommand('justifyLeft')" class="menu-item" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
-            <button onclick="execCommand('justifyCenter')" class="menu-item" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
-            <button onclick="execCommand('justifyRight')" class="menu-item" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
-            <button onclick="execCommand('justifyFull')" class="menu-item" title="Align Justify"><i class="fa-solid fa-align-justify"></i></button>
-            <button onclick="wrapSelectedText('p')" class="menu-item" title="Paragraph"><i class="fa-solid fa-paragraph"></i></button>
-            <button onclick="wrapSelectedText('h1')" class="menu-item" title="Heading 1"><i class="fa-solid fa-heading">1</i></button>
-            <button onclick="wrapSelectedText('h2')" class="menu-item" title="Heading 2"><i class="fa-solid fa-heading">2</i></button>
-            <button onclick="wrapSelectedText('h3')" class="menu-item" title="Heading 3"><i class="fa-solid fa-heading">3</i></button>
-            <button onclick="openLinkModal()" class="menu-item" title="Insert Link"><i class="fa-solid fa-link"></i></button>
-            <button onclick="removeLink()" class="menu-item" title="Remove Link"><i class="fa-solid fa-link-slash"></i></button>
-            <button onclick="openImageModal()" class="menu-item" title="Insert Image"><i class="fa-regular fa-image"></i></button>
+            <button onclick="apply('bold')" class="btn btn-light menu-item" title="Bold"><i class="fa-solid fa-bold"></i></button>
+            <button onclick="apply('italic')" class="btn btn-light menu-item" title="Italic"><i class="fa-solid fa-italic"></i></button>
+            <button onclick="apply('underline')" class="btn btn-light menu-item" title="Underline"><i class="fa-solid fa-underline"></i></button>
+            <button onclick="apply('insertOrderedList')" class="btn btn-light menu-item" title="Numbered List"><i class="fa-solid fa-list-ol"></i></button>
+            <button onclick="apply('insertUnorderedList')" class="btn btn-light menu-item" title="Bullet List"><i class="fa-solid fa-list"></i></button>
+            <button onclick="apply('justifyLeft')" class="btn btn-light menu-item" title="Align Left"><i class="fa-solid fa-align-left"></i></button>
+            <button onclick="apply('justifyCenter')" class="btn btn-light menu-item" title="Align Center"><i class="fa-solid fa-align-center"></i></button>
+            <button onclick="apply('justifyRight')" class="btn btn-light menu-item" title="Align Right"><i class="fa-solid fa-align-right"></i></button>
+            <button onclick="apply('justifyFull')" class="btn btn-light menu-item" title="Align Justify"><i class="fa-solid fa-align-justify"></i></button>
+            <button onclick="wrapSelectedText('p')" class="btn btn-light menu-item" title="Paragraph"><i class="fa-solid fa-paragraph"></i></button>
+            <button onclick="wrapSelectedText('h1')" class="btn btn-light menu-item" title="Heading 1"><i class="fa-solid fa-heading">1</i></button>
+            <button onclick="wrapSelectedText('h2')" class="btn btn-light menu-item" title="Heading 2"><i class="fa-solid fa-heading">2</i></button>
+            <button onclick="wrapSelectedText('h3')" class="btn btn-light menu-item" title="Heading 3"><i class="fa-solid fa-heading">3</i></button>
+            <button onclick="openLinkModal()" class="btn btn-light menu-item" title="Insert Link"><i class="fa-solid fa-link"></i></button>
+            <button onclick="removeLink()" class="btn btn-light menu-item" title="Remove Link"><i class="fa-solid fa-link-slash"></i></button>
+            <button onclick="openImageModal()" class="btn btn-light menu-item" title="Insert Image"><i class="fa-regular fa-image"></i></button>
         </div>
         <div class="editor-content" contenteditable="true" id="editor" oninput="updateHtmlCode()"
             onkeydown="handleEnterKey()" onclick="updateCursorPosition()"></div>
@@ -47,22 +47,22 @@
         <div class="modal-content">
             <span class="close" onclick="closeLinkModal()">&times;</span>
             <div class="modal-content-item">
-                <label for="linkUrl">Text:</label>
-                <input type="text" id="linkText">
+                <label for="linkUrl">Text</label>
+                <input type="text" id="linkText" placeholder="Click here">
             </div>
             <div class="modal-content-item">
-                <label for="linkUrl">URL:</label>
-                <input type="text" id="linkUrl">
+                <label for="linkUrl">URL</label>
+                <input type="text" id="linkUrl" placeholder="http://www.example.com">
             </div>
             <div class="modal-content-item">
                 <label for="linkTarget">Target:</label>
                 <select id="linkTarget">
-                    <option value="_self">Self</option>
-                    <option value="_blank">Blank</option>
+                    <option value="_self">Same Page</option>
+                    <option value="_blank">New Tab</option>
                 </select>
             </div>
             <div class="modal-content-item">
-                <button onclick="insertLink()">Insert Link</button>
+                <button onclick="insertLink()" class="btn btn-light">Insert Link</button>
             </div>
         </div>
     </div>
@@ -72,11 +72,11 @@
         <div class="modal-content">
             <span class="close" onclick="closeImageModal()">&times;</span>
             <div class="modal-content-item">
-                <label for="imageUrl">Image URL:</label>
-                <input type="text" id="imageUrl">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" id="imageUrl" placeholder="http://www.example.com/pic.jpg" />
             </div>
             <div class="modal-content-item">
-                <label>Width/Height:</label>
+                <label>Set width and/or height</label>
                 <select id="modifyOption" onchange="handleModifyOption()">
                     <option value="both">Both</option>
                     <option value="width">Width</option>
@@ -84,26 +84,26 @@
                 </select>
             </div>
             <div class="modal-content-item" id="imageWidthDiv">
-                <label for="imageWidth">Width (200px or leave empty):</label>
-                <input type="text" id="imageWidth">
+                <label for="imageWidth">Width</label>
+                <input type="text" id="imageWidth" placeholder="200px" />
             </div>
             <div class="modal-content-item" id="imageHeightDiv">
-                <label for="imageHeight">Height (200px or leave empty):</label>
-                <input type="text" id="imageHeight">
+                <label for="imageHeight">Height</label>
+                <input type="text" id="imageHeight" placeholder="200px" />
             </div>
             <div class="modal-content-item">
-                <label for="imageAlign">Align:</label>
+                <label for="imageAlign">Align</label>
                 <select id="imageAlign">
                     <option value="left">Left</option>
                     <option value="right">Right</option>
                 </select>
             </div>
             <div class="modal-content-item">
-                <label for="imageMargin">Margin (15px 15px 15px 15px):</label>
-                <input type="text" id="imageMargin">
+                <label for="imageMargin">Margin (top right bottom left)</label>
+                <input type="text" id="imageMargin" placeholder="15px 15px 15px 15px" />
             </div>
             <div class="modal-content-item">
-                <button onclick="insertImage()">Insert Image</button>
+                <button onclick="insertImage()" class="btn btn-light">Insert Image</button>
             </div>
         </div>
     </div>

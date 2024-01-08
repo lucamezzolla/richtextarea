@@ -1,3 +1,42 @@
+input,
+select {
+    height: 25px;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.btn {
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: sans-serif;
+    cursor: pointer;
+    padding: 12px;
+    border: 0px;
+    -webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+}
+
+.btn:focus,
+.btn.focus {
+    outline: 0;
+}
+
+.btn-light {
+    background: #ededed;
+    color: #000;
+}
+
+.btn-light:hover {
+    background: #dbdbdb;
+    color: #000;
+  }
+
+.insert-button :hover {
+    background: #f6f6f7;
+    outline: 1px solid transparent;
+}
+
 .editor-container {
     width: 100%;
     margin: 20px auto;
@@ -31,13 +70,11 @@
 }
 
 .menu-item {
-    padding: 15px;
-    width: 60px;
-    height: 60px;
-}
-
-.menu-item > i {
-    font-size: 18px;    
+    padding: 8px;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    border: 1px solid #9c9c9c;
 }
 
 /* Aggiunti stili per il modal */
@@ -68,7 +105,9 @@
     margin-bottom: 10px;
 }
 
-.modal-content-item > input, label, select {
+.modal-content-item>input,
+label,
+select {
     width: 100%;
 }
 

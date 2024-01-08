@@ -1,8 +1,9 @@
 let cursorPosition;
 
-function execCommand(command, value = null) {
-    document.execCommand(command, false, value);
+function apply(command) {
+    document.execCommand(command);
     updateHtmlCode();
+    window.getSelection()?.removeAllRanges();
 }
 
 function wrapSelectedText(tag) {
@@ -10,14 +11,10 @@ function wrapSelectedText(tag) {
     const range = selection.getRangeAt(0);
     const selectedText = range.extractContents();
     const wrapper = document.createElement(tag);
-
-    // Trova il tag di intestazione nella gerarchia DOM
     let parentNode = range.commonAncestorContainer;
-
     while (parentNode && !parentNode.nodeName.match(/^(H1|H2|H3)$/)) {
         parentNode = parentNode.parentNode;
     }
-
     if (parentNode) {
         // Rimuovi il tag di intestazione esistente
         const parent = parentNode.parentNode;
@@ -26,12 +23,12 @@ function wrapSelectedText(tag) {
         }
         parent.removeChild(parentNode);
     }
-
     wrapper.appendChild(selectedText);
     range.insertNode(wrapper);
-
     updateHtmlCode();
+    window.getSelection()?.removeAllRanges();
 }
+
 
 function openImageModal() {
     // Verifica se il cursore è presente nell'editor
