@@ -154,6 +154,7 @@ function insertColor() {
     const linkColor = document.getElementById('color').value;
     // Costruisci il tag 'div'
     const linkTag = `<div style='color: ${linkColor}'>${linkText}</div>\r\n`;
+    restoreSelection(cursorPosition);
     document.execCommand('insertHTML', false, linkTag);
     // Chiudi il modal
     closeColorModal();
