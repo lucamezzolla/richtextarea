@@ -16,6 +16,7 @@
 
     <div class="editor-container">
         <div class="editor-toolbar">
+            <button onclick="toggleEditorView()" class="btn btn-light menu-item" title="Toggle HTML Code"><i class="fa-solid fa-code"></i></button>
             <button onclick="apply('bold')" class="btn btn-light menu-item" title="Bold"><i class="fa-solid fa-bold"></i></button>
             <button onclick="apply('italic')" class="btn btn-light menu-item" title="Italic"><i class="fa-solid fa-italic"></i></button>
             <button onclick="apply('underline')" class="btn btn-light menu-item" title="Underline"><i class="fa-solid fa-underline"></i></button>
@@ -34,11 +35,11 @@
             <button onclick="openImageModal()" class="btn btn-light menu-item" title="Insert Image"><i class="fa-regular fa-image"></i></button>
         </div>
         <div class="editor-content" contenteditable="true" id="editor" oninput="updateHtmlCode()"
-            onkeydown="handleEnterKey()" onclick="updateCursorPosition()"></div>
+            onkeydown="handleEnterKey()" onclick="updateCursorPosition()" style="display: block"></div>
 
-        <div class="html-container">
+        <div class="html-container" id="code" style="display: none">
             <h3>HTML Code</h3>
-            <textarea id="html-code" rows="10" style="width: 100%;" oninput="updateEditorContent()"></textarea>
+            <textarea id="html-code" rows="10" style="width: 100%" oninput="updateEditorContent()"></textarea>
         </div>
     </div>
 

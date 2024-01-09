@@ -165,3 +165,15 @@ function closeLinkModal() {
     document.getElementById('linkUrl').value = '';
     document.getElementById('linkTarget').value = '_blank';
 }
+
+function toggleEditorView() {
+    const htmlCode1 = document.getElementById('editor');
+    const htmlCode2 = document.getElementById('code');
+    if (htmlCode1.style.display === 'block' || htmlCode1.style.display === '') {
+        htmlCode1.style.display = 'none';
+        htmlCode2.style.display = 'block';
+    } else {
+        htmlCode1.style.display = 'block';
+        htmlCode2.style.display = 'none';
+    }
+}
