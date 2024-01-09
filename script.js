@@ -29,7 +29,6 @@ function wrapSelectedText(tag) {
     window.getSelection()?.removeAllRanges();
 }
 
-
 function openImageModal() {
     // Verifica se il cursore è presente nell'editor
     const editor = document.getElementById('editor');
@@ -138,6 +137,23 @@ function openLinkModal() {
     document.getElementById('linkModal').style.display = 'block';  // Apre il modal
 }
 
+function openColorModal() {
+    document.getElementById('colorModal').style.display = 'block';
+}
+
+function insertColor() {
+    // Recupera i valori da inserire
+    const linkText = document.getElementById('colorText').value;
+    const linkColor = document.getElementById('color').value;
+    // Costruisci il tag 'div'
+    const linkTag = `<div style='color: ${linkColor}'>${linkText}</div>`;
+    // Ripristina la selezione e inserisci il color
+    restoreSelection(cursorPosition);
+    document.execCommand('insertHTML', false, linkTag);
+    // Chiudi il modal
+    closeColorModal();
+}
+
 function insertLink() {
     // Recupera i valori da inserire
     const linkText = document.getElementById('linkText').value;
@@ -166,14 +182,29 @@ function closeLinkModal() {
     document.getElementById('linkTarget').value = '_blank';
 }
 
+function closeColorModal() {
+    // Chiudi il modal
+    document.getElementById('colorModal').style.display = 'none';
+    document.getElementById('colorText').value = '';
+    document.getElementById('color').value = '#000000';
+}
+
 function toggleEditorView() {
-    const htmlCode1 = document.getElementById('editor');
-    const htmlCode2 = document.getElementById('code');
-    if (htmlCode1.style.display === 'block' || htmlCode1.style.display === '') {
-        htmlCode1.style.display = 'none';
-        htmlCode2.style.display = 'block';
+    const editorArea = document.getElementById('editor');
+    const codeArea = document.getElementById('code');
+    const toolbarButtons = document.querySelectorAll('.editor-toolbar button');
+    var hideButtons = 'none';
+    if (editorArea.style.display === 'block' || editorArea.style.display === '') {
+        editorArea.style.display = 'none';
+        codeArea.style.display = 'block';
     } else {
-        htmlCode1.style.display = 'block';
-        htmlCode2.style.display = 'none';
+        editorArea.style.display = 'block';
+        codeArea.style.display = 'none';
+        hideButtons = 'block';
     }
+    toolbarButtons.forEach(button => {
+        if (button.id !== 'code-button') {
+            button.style.display = hideButtons;
+        }
+    });
 }

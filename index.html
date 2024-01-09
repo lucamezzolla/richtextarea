@@ -16,7 +16,7 @@
 
     <div class="editor-container">
         <div class="editor-toolbar">
-            <button onclick="toggleEditorView()" class="btn btn-light menu-item" title="Toggle HTML Code"><i class="fa-solid fa-code"></i></button>
+            <button onclick="toggleEditorView()" id="code-button" class="btn btn-light menu-item" title="Toggle HTML Code"><i class="fa-solid fa-code"></i></button>
             <button onclick="apply('bold')" class="btn btn-light menu-item" title="Bold"><i class="fa-solid fa-bold"></i></button>
             <button onclick="apply('italic')" class="btn btn-light menu-item" title="Italic"><i class="fa-solid fa-italic"></i></button>
             <button onclick="apply('underline')" class="btn btn-light menu-item" title="Underline"><i class="fa-solid fa-underline"></i></button>
@@ -30,6 +30,7 @@
             <button onclick="wrapSelectedText('h1')" class="btn btn-light menu-item" title="Heading 1"><i class="fa-solid fa-heading">1</i></button>
             <button onclick="wrapSelectedText('h2')" class="btn btn-light menu-item" title="Heading 2"><i class="fa-solid fa-heading">2</i></button>
             <button onclick="wrapSelectedText('h3')" class="btn btn-light menu-item" title="Heading 3"><i class="fa-solid fa-heading">3</i></button>
+            <button onclick="openColorModal()" class="btn btn-light menu-item" title="Insert Text Color"><i class="fa-solid fa-paint-roller"></i></button>
             <button onclick="openLinkModal()" class="btn btn-light menu-item" title="Insert Link"><i class="fa-solid fa-link"></i></button>
             <button onclick="removeLink()" class="btn btn-light menu-item" title="Remove Link"><i class="fa-solid fa-link-slash"></i></button>
             <button onclick="openImageModal()" class="btn btn-light menu-item" title="Insert Image"><i class="fa-regular fa-image"></i></button>
@@ -48,7 +49,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeLinkModal()">&times;</span>
             <div class="modal-content-item">
-                <label for="linkUrl">Text</label>
+                <label for="linkText">Text</label>
                 <input type="text" id="linkText" placeholder="Click here">
             </div>
             <div class="modal-content-item">
@@ -105,6 +106,22 @@
             </div>
             <div class="modal-content-item">
                 <button onclick="insertImage()" class="btn btn-light">Insert Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per l'inserimento del colore -->
+    <div id="colorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeColorModal()">&times;</span>
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 95%; padding-right: 15px"><input type="text" id="colorText" placeholder="Text"></td>
+                    <td style="width: 5%"><input type="color" id="color" style="height: 30px !important" /></td>
+                </tr>
+            </table>
+            <div class="modal-content-item">
+                <button onclick="insertColor()" class="btn btn-light">Insert Text</button>
             </div>
         </div>
     </div>
