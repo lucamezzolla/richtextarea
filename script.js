@@ -138,6 +138,13 @@ function openLinkModal() {
 }
 
 function openColorModal() {
+    // Verifica se il cursore è presente nell'editor
+    const editor = document.getElementById('editor');
+    const selection = window.getSelection();
+    if (!editor.contains(selection.anchorNode)) {
+        alert('Place the cursor in the editor before inserting an image.');
+        return;
+    }
     document.getElementById('colorModal').style.display = 'block';
 }
 
